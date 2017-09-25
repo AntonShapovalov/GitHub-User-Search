@@ -18,7 +18,7 @@ class LaunchViewModel(application: Application) : AndroidViewModel(application) 
     private val launchDelay = 2L // show launch screen at least n seconds
     private val delayTimeUnit = TimeUnit.SECONDS
 
-    private var launchSubscription: Subscription? = null
+    private var subscription: Subscription? = null
     val state = LaunchStateLiveData()
 
     /**
@@ -28,17 +28,16 @@ class LaunchViewModel(application: Application) : AndroidViewModel(application) 
         val delay = Observable.timer(launchDelay, delayTimeUnit)
         val launch = Observable.just(getApplication<SearchApplication>())
                 .map { it.appComponent }.map { 1L } // build Dagger app component
-        launchSubscription = Observable.zip(delay, launch, { _, _ -> state })
+        subscription = Observable.zip(delay, launch, { _, _ -> state })
                 .map { it.value?.copy(isCompleted = true) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError { it.printStackTrace() }
-                .subscribe { state.value = it }
+                .subscribe({ state.value = it }, { it.printStackTrace() })
     }
 
     override fun onCleared() {
         super.onCleared()
-        launchSubscription?.unsubscribe()
+        subscription?.unsubscribe()
     }
 
 }

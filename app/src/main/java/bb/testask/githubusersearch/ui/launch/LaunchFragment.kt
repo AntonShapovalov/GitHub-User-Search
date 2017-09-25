@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import bb.testask.githubusersearch.R
-import bb.testask.githubusersearch.ui.activity.showSearchFragment
+import bb.testask.githubusersearch.ui.ext.showSearchFragment
 
 
 /**

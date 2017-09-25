@@ -16,7 +16,7 @@ class UserLocalModel @Inject constructor(private val daoSession: DaoSession) {
     private val query2UserDao: Query2UserDao = daoSession.query2UserDao
 
     /**
-     * Save query from UI and users from API response
+     * Save search query from UI and users from API response
      */
     fun saveUsers(query: String, users: List<UserEntry>) {
         if (users.isEmpty()) return
@@ -39,7 +39,7 @@ class UserLocalModel @Inject constructor(private val daoSession: DaoSession) {
     }
 
     /**
-     * Delete all local saved user and queries
+     * Delete all local saved users and queries
      */
     fun clear() {
         daoSession.runInTx {

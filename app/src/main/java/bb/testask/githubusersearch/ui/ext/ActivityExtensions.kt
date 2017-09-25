@@ -1,9 +1,12 @@
-package bb.testask.githubusersearch.ui.activity
+package bb.testask.githubusersearch.ui.ext
 
 import android.app.Activity
 import android.app.FragmentTransaction
+import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import bb.testask.githubusersearch.R
 import bb.testask.githubusersearch.ui.launch.LaunchFragment
 import bb.testask.githubusersearch.ui.search.SearchFragment
@@ -11,6 +14,7 @@ import bb.testask.githubusersearch.ui.search.SearchFragment
 /**
  * Extensions for [Activity]
  */
+
 const val LAUNCH_FRAGMENT_TAG = "LAUNCH_FRAGMENT_TAG"
 const val SEARCH_FRAGMENT_TAG = "SEARCH_FRAGMENT_TAG"
 
@@ -47,4 +51,11 @@ private fun FragmentActivity.replaceFragment(
     if (isAddToBackStack) transaction.addToBackStack(backStackTag ?: tag)
     transaction.replace(containerId, newFragment, tag)
     transaction.commit()
+}
+
+fun Activity.showToast(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+
+fun Activity.hideKeyboard() = currentFocus?.let {
+    val imm = it.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(it.windowToken, 0)
 }

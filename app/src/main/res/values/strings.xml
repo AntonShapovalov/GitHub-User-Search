@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">GitHub UserSearch</string>
+    <string name="search_hint">Search GitHub Users</string>
+    <string name="no_users_found">No Users found</string>
+    <string name="error_message">Failed to get Users</string>
 </resources>

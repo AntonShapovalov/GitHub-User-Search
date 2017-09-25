@@ -19,6 +19,8 @@ buildscript {
         retrofitVersion = '2.1.0'
         okHttpVersion = '3.4.2'
         greenDaoVersion = '3.2.0'
+        glideVersion = '3.7.0'
+        circleImageVersion = '2.1.0'
     }
     repositories {
         jcenter()
