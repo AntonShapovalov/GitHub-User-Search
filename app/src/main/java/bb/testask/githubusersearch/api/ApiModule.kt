@@ -13,6 +13,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 /**
  * Provide API dependencies for [AppComponent]
@@ -24,6 +25,7 @@ class ApiModule {
     private val connectionTimeout = 60 //in seconds
     private val readTimeout = 60 //in seconds
 
+    @Singleton
     @Provides
     fun provideApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
 

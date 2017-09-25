@@ -1,7 +1,11 @@
 package bb.testask.githubusersearch.ui.activity
 
+import bb.testask.githubusersearch.app.AppComponent
+import javax.inject.Scope
+
 /**
- * Created by DevLead on 25.09.2017.
+ * Scope for all sub-components of [AppComponent]
  */
-interface ViewScope {
-}
+@Scope
+@kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+annotation class ViewScope

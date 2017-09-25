@@ -1,7 +1,16 @@
 package bb.testask.githubusersearch.app
 
+import bb.testask.githubusersearch.datamodel.UserLocalModelTest
+import bb.testask.githubusersearch.ui.activity.ViewScope
+import dagger.Component
+
 /**
- * Created by DevLead on 25.09.2017.
+ * Provide dependencies for [UserLocalModelTest]
  */
-class AppTestComponent {
+@ViewScope
+@Component(dependencies = arrayOf(AppComponent::class))
+interface AppTestComponent {
+
+    fun inject(test: UserLocalModelTest)
+
 }

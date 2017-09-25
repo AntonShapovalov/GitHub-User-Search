@@ -11,6 +11,7 @@ class SearchApplication : Application() {
     val appComponent: AppComponent by lazy { buildAppComponent() }
 
     private fun buildAppComponent(): AppComponent = DaggerAppComponent.builder()
+            .appModule(AppModule(applicationContext))
             .apiModule(ApiModule())
             .build()
 

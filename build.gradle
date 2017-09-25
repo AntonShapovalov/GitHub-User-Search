@@ -18,12 +18,14 @@ buildscript {
         daggerVersion = '2.6'
         retrofitVersion = '2.1.0'
         okHttpVersion = '3.4.2'
+        greenDaoVersion = '3.2.0'
     }
     repositories {
         jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 
         // NOTE: Do not place your application dependencies here; they belong

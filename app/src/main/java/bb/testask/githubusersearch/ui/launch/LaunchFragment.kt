@@ -18,15 +18,15 @@ class LaunchFragment : Fragment() {
 
     private lateinit var viewModel: LaunchViewModel
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+            inflater.inflate(R.layout.fragment_launch, container, false)
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(LaunchViewModel::class.java)
         viewModel.state.observe(this, Observer { onLaunchCompleted(it) })
         viewModel.launch()
     }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_launch, container, false)
 
     private fun onLaunchCompleted(state: LaunchState?) {
         if (state?.isCompleted == true) activity.showSearchFragment()

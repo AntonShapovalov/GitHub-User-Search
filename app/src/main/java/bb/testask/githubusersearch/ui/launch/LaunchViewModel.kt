@@ -15,11 +15,11 @@ import java.util.concurrent.TimeUnit
  */
 class LaunchViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val launchDelay = 3L // show launch screen at least n seconds
+    private val launchDelay = 2L // show launch screen at least n seconds
     private val delayTimeUnit = TimeUnit.SECONDS
 
     private var launchSubscription: Subscription? = null
-    val state = StateLiveData()
+    val state = LaunchStateLiveData()
 
     /**
      * Init Dagger application component and notify ready with [launchDelay]
@@ -43,7 +43,7 @@ class LaunchViewModel(application: Application) : AndroidViewModel(application) 
 
 }
 
-class StateLiveData(state: LaunchState = LaunchState()) : MutableLiveData<LaunchState>() {
+class LaunchStateLiveData(state: LaunchState = LaunchState()) : MutableLiveData<LaunchState>() {
     init {
         value = state
     }
