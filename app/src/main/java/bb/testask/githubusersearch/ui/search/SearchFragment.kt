@@ -14,18 +14,20 @@ import bb.testask.githubusersearch.dao.User
 import bb.testask.githubusersearch.ui.activity.MainActivity
 import bb.testask.githubusersearch.ui.ext.*
 import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.android.synthetic.main.layout_flipper.*
 import javax.inject.Inject
+
+const val QUERY_KEY = "QUERY_KEY"
 
 /**
  * Search screen
  */
 class SearchFragment : Fragment() {
 
-    @Inject lateinit var factory: SearchViewModelFactory
+    @Inject lateinit var factory: ViewModelFactory
 
     private lateinit var viewModel: SearchViewModel
     private val adapter: UserListAdapter = UserListAdapter { showUserDetails(it) }
-    private val queryKey: String = "QUERY_KEY"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_search, container, false)
@@ -47,28 +49,33 @@ class SearchFragment : Fragment() {
         (activity as MainActivity).mainComponent.inject(this)
         viewModel = ViewModelProviders.of(this, factory).get(SearchViewModel::class.java)
         viewModel.state.observe(this, Observer { onStateChanged(it) })
-        savedInstanceState?.getString(queryKey)?.let { viewModel.search(it) }
+        if (savedInstanceState == null) {
+            viewModel.restoreLastQuery()
+        } else {
+            savedInstanceState.getString(QUERY_KEY)?.let { viewModel.search(it) }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
         with(viewModel.state.value) {
-            if (this is SearchState.Success) outState?.putString(queryKey, this.query)
+            if (this is UsersLoaded) outState?.putString(QUERY_KEY, this.query)
         }
         super.onSaveInstanceState(outState)
     }
 
-    private fun onStateChanged(state: SearchState?) {
+    private fun onStateChanged(state: ViewModelState?) {
         when (state) {
-            is SearchState.Progress -> flipper.progress()
-            is SearchState.Success -> setUsers(state.users)
-            is SearchState.Error -> showError(state.t.message)
+            is StateProgress -> flipper.progress()
+            is SearchRestored -> searchView.setQuery(state.query, true)
+            is UsersLoaded -> setUsers(state.users)
+            is StateError -> showError(state.throwable, R.string.error_message_search, { flipper.empty() })
             else -> flipper.empty()
         }
     }
 
     private fun setUsers(users: List<User>) {
         if (users.isEmpty()) {
-            flipper.noUsersFound()
+            flipper.message()
             adapter.clearItems()
         } else {
             flipper.empty()
@@ -76,13 +83,8 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun showError(message: String?) {
-        flipper.empty()
-        activity.showToast(message ?: getString(R.string.error_message))
-    }
-
     private fun showUserDetails(userId: Int) {
-
+        activity.showDetailsFragment(userId)
     }
 
 }

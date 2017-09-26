@@ -8,7 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import bb.testask.githubusersearch.R
-import bb.testask.githubusersearch.ui.ext.showSearchFragment
+import bb.testask.githubusersearch.ui.ext.*
+import kotlinx.android.synthetic.main.fragment_launch.*
 
 
 /**
@@ -24,12 +25,15 @@ class LaunchFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(LaunchViewModel::class.java)
-        viewModel.state.observe(this, Observer { onLaunchCompleted(it) })
+        viewModel.state.observe(this, Observer { onStateChanged(it) })
         viewModel.launch()
     }
 
-    private fun onLaunchCompleted(state: LaunchState?) {
-        if (state?.isCompleted == true) activity.showSearchFragment()
+    private fun onStateChanged(state: ViewModelState?) = when (state) {
+        is StateIdle -> activity.showSearchFragment()
+        is StateError -> showError(state.throwable, R.string.error_message_launch, { progress.hide() })
+        else -> {
+        }
     }
 
 }

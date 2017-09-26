@@ -5,8 +5,10 @@ import android.support.test.runner.AndroidJUnit4
 import bb.testask.githubusersearch.app.DaggerAppTestComponent
 import bb.testask.githubusersearch.app.SearchApplication
 import bb.testask.githubusersearch.dao.DaoSession
+import bb.testask.githubusersearch.model.ProfileResponse
 import bb.testask.githubusersearch.model.UserEntry
 import org.junit.After
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -22,6 +24,9 @@ class UserLocalModelTest {
     @Inject lateinit var userLocalModel: UserLocalModel
     @Inject lateinit var daoSession: DaoSession
 
+    private val dummy = "dummy"
+    private val id = 25
+
     @Before
     fun setUp() {
         val app = InstrumentationRegistry.getTargetContext().applicationContext as SearchApplication
@@ -29,13 +34,18 @@ class UserLocalModelTest {
                 .appComponent(app.appComponent)
                 .build()
                 .inject(this)
+        userLocalModel.clear()
     }
 
     @Test
-    fun saveUsers() {
-        val dummy = "dummy"
-        val id = 25
-        userLocalModel.saveUsers(query = dummy, users = getTestUsers(dummy, id))
+    fun saveRemoteData() {
+        saveUsers()
+        saveProfile()
+    }
+
+    private fun saveUsers() {
+        val response = listOf(UserEntry(login = dummy, id = id, avatarUrl = dummy))
+        userLocalModel.saveUsers(query = dummy, users = response)
         // tables row count
         with(daoSession) {
             assertEquals(userDao.loadAll().size, 1)
@@ -50,14 +60,17 @@ class UserLocalModelTest {
         assertEquals(dummy, user.login)
     }
 
+    private fun saveProfile() {
+        val response = ProfileResponse(login = dummy, id = id, name = dummy, bio = null)
+        userLocalModel.saveProfile(response)
+        val user = userLocalModel.getProfile(id)
+        Assert.assertNotNull(user)
+        assertEquals(dummy, user.name)
+    }
+
     @After
     fun tearDown() {
         userLocalModel.clear()
-    }
-
-    private fun getTestUsers(s: String, i: Int): List<UserEntry> {
-        val user = UserEntry(login = s, id = i, avatarUrl = s)
-        return listOf(user)
     }
 
 }

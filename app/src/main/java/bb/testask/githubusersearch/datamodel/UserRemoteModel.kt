@@ -1,6 +1,7 @@
 package bb.testask.githubusersearch.datamodel
 
 import bb.testask.githubusersearch.api.ApiService
+import bb.testask.githubusersearch.model.ProfileResponse
 import bb.testask.githubusersearch.model.UserEntry
 import rx.Observable
 import javax.inject.Inject
@@ -17,5 +18,9 @@ class UserRemoteModel @Inject constructor() {
     fun getUsers(query: String): Observable<List<UserEntry>> = apiService
             .getUsers(query)
             .map { if (it.isSuccessful) it.body().items else emptyList() }
+
+    fun getProfile(login: String): Observable<ProfileResponse> = apiService
+            .getProfile(login)
+            .map { if (it.isSuccessful) it.body() else throw RuntimeException("Unable get Profile info") }
 
 }

@@ -1,6 +1,7 @@
 package bb.testask.githubusersearch.datamodel
 
 import bb.testask.githubusersearch.dao.*
+import bb.testask.githubusersearch.model.ProfileResponse
 import bb.testask.githubusersearch.model.UserEntry
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -31,12 +32,36 @@ class UserLocalModel @Inject constructor(private val daoSession: DaoSession) {
      * Get local saved users
      */
     fun getUsers(query: String): List<User> {
-        val queryId = findQueryByPK(query)?.id ?: return emptyList()
+        val dbQuery = findQueryByPK(query) ?: return emptyList()
+        queryDao.updateInTx(dbQuery.apply { execDate = System.currentTimeMillis() })
         val builder = userDao.queryBuilder()
         builder.join(Query2User::class.java, Query2UserDao.Properties.UserId)
-                .where(Query2UserDao.Properties.QueryId.eq(queryId))
+                .where(Query2UserDao.Properties.QueryId.eq(dbQuery.id))
         return builder.list()
     }
+
+    /**
+     * Try to find last success query to restore UI state on launch
+     */
+    fun getLastQuery(): String = queryDao.queryBuilder()
+            .orderDesc(QueryDao.Properties.ExecDate)
+            .list().firstOrNull()?.query ?: ""
+
+    /**
+     * Save user details info
+     */
+    fun saveProfile(profile: ProfileResponse) {
+        val user = findUserByPK(profile.id) ?: return
+        daoSession.runInTx {
+            user.apply {
+                name = profile.name
+                bio = profile.bio
+            }
+            userDao.update(user)
+        }
+    }
+
+    fun getProfile(serverId: Int): User = findUserByPK(serverId) ?: User()
 
     /**
      * Delete all local saved users and queries
@@ -52,8 +77,11 @@ class UserLocalModel @Inject constructor(private val daoSession: DaoSession) {
     private fun saveQuery(query: String): Query {
         var dbQuery = findQueryByPK(query)
         if (dbQuery == null) {
-            dbQuery = Query().apply { this.query = query }
+            dbQuery = Query().apply { this.query = query; execDate = System.currentTimeMillis() }
             queryDao.insert(dbQuery)
+        } else {
+            dbQuery.execDate = System.currentTimeMillis()
+            queryDao.update(dbQuery)
         }
         return dbQuery
     }

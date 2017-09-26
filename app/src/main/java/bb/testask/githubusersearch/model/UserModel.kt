@@ -24,3 +24,12 @@ data class UserEntry(
         val avatarUrl: String
 )
 
+/**
+ * Response model of [ApiService.getProfile]
+ */
+data class ProfileResponse(
+        val login: String,
+        val id: Int,
+        val name: String,
+        val bio: String?
+)

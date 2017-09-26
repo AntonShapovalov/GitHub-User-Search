@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentActivity
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import bb.testask.githubusersearch.R
+import bb.testask.githubusersearch.ui.details.DetailsFragment
+import bb.testask.githubusersearch.ui.details.setParams
 import bb.testask.githubusersearch.ui.launch.LaunchFragment
 import bb.testask.githubusersearch.ui.search.SearchFragment
 
@@ -17,6 +19,7 @@ import bb.testask.githubusersearch.ui.search.SearchFragment
 
 const val LAUNCH_FRAGMENT_TAG = "LAUNCH_FRAGMENT_TAG"
 const val SEARCH_FRAGMENT_TAG = "SEARCH_FRAGMENT_TAG"
+const val DETAILS_FRAGMENT_TAG = "DETAILS_FRAGMENT_TAG"
 
 fun FragmentActivity.showLaunchFragment() {
     var fragment = getFragment(LAUNCH_FRAGMENT_TAG)
@@ -31,6 +34,14 @@ fun FragmentActivity.showSearchFragment() {
     if (fragment == null) {
         fragment = SearchFragment()
         replaceFragment(R.id.fragment_container, fragment, SEARCH_FRAGMENT_TAG)
+    }
+}
+
+fun FragmentActivity.showDetailsFragment(userId: Int) {
+    var fragment = getFragment(DETAILS_FRAGMENT_TAG)
+    if (fragment == null) {
+        fragment = DetailsFragment().setParams(userId)
+        replaceFragment(R.id.fragment_container, fragment, DETAILS_FRAGMENT_TAG, isAddToBackStack = true, backStackTag = SEARCH_FRAGMENT_TAG)
     }
 }
 
@@ -58,4 +69,10 @@ fun Activity.showToast(message: String) = Toast.makeText(this, message, Toast.LE
 fun Activity.hideKeyboard() = currentFocus?.let {
     val imm = it.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(it.windowToken, 0)
+}
+
+fun Fragment.showError(throwable: Throwable, messageId: Int, action: () -> Unit) {
+    action()
+    throwable.printStackTrace()
+    activity.showToast(throwable.message ?: getString(messageId))
 }

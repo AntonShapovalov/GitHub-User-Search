@@ -1,14 +1,14 @@
 package bb.testask.githubusersearch.ui.search
 
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import bb.testask.githubusersearch.dao.User
 import bb.testask.githubusersearch.datamodel.UserLocalModel
 import bb.testask.githubusersearch.datamodel.UserRemoteModel
+import bb.testask.githubusersearch.ui.ext.*
 import rx.Observable
-import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
 /**
@@ -19,21 +19,37 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     @Inject lateinit var userLocalModel: UserLocalModel
     @Inject lateinit var userRemoteModel: UserRemoteModel
 
-    private var subscription: Subscription? = null
-    val state = SearchStateLiveData()
+    private val subscriptions: CompositeSubscription = CompositeSubscription()
+    val state = StateLiveData()
+
+    /**
+     * Try to restore last success query on app launch
+     */
+    fun restoreLastQuery() {
+        if (state.value is SearchRestored || state.value is UsersLoaded) return@restoreLastQuery
+        val s = Observable.fromCallable { userLocalModel.getLastQuery() }
+                .map { if (it.isNotEmpty()) SearchRestored(it) else StateIdle }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { state.value = StateProgress }
+                .subscribe({ state.value = it }, { state.value = StateError(it) })
+        subscriptions.add(s)
+    }
 
     /**
      * Get users by query, if exists local data - do not perform API call
      */
     fun search(query: String) {
-        subscription = getLocalData(query)
+        val currentValue = state.value
+        if (currentValue is UsersLoaded && currentValue.query == query) return@search
+        val s = getLocalData(query)
                 .concatWith(getRemoteData(query))
                 .take(1)
-                .map { SearchState.Success(query, it) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { state.value = SearchState.Progress }
-                .subscribe({ state.value = it }, { state.value = SearchState.Error(it) })
+                .doOnSubscribe { state.value = StateProgress }
+                .subscribe({ state.value = UsersLoaded(query, it) }, { state.value = StateError(it) })
+        subscriptions.add(s)
     }
 
     private fun getLocalData(query: String): Observable<List<User>> = Observable
@@ -47,20 +63,7 @@ class SearchViewModel @Inject constructor() : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        subscription?.unsubscribe()
+        subscriptions.unsubscribe()
     }
 
-}
-
-class SearchStateLiveData(state: SearchState = SearchState.Idle) : MutableLiveData<SearchState>() {
-    init {
-        value = state
-    }
-}
-
-sealed class SearchState {
-    object Idle : SearchState()
-    object Progress : SearchState()
-    data class Success(val query: String, val users: List<User>) : SearchState()
-    data class Error(val t: Throwable) : SearchState()
 }

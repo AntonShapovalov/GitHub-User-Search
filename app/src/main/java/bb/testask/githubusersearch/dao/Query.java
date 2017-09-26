@@ -1,14 +1,14 @@
 package bb.testask.githubusersearch.dao;
 
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.JoinEntity;
 import org.greenrobot.greendao.annotation.ToMany;
 
 import java.util.List;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.DaoException;
 
 /**
  * DB Entity for user search query from UI
@@ -20,6 +20,7 @@ public class Query {
     @Id private Long id;
 
     @Index(unique = true) private String query;
+    private Long execDate;
 
     @ToMany
     @JoinEntity(
@@ -38,10 +39,11 @@ public class Query {
     @Generated(hash = 223113186)
     private transient QueryDao myDao;
 
-    @Generated(hash = 1842239695)
-    public Query(Long id, String query) {
+    @Generated(hash = 1889251744)
+    public Query(Long id, String query, Long execDate) {
         this.id = id;
         this.query = query;
+        this.execDate = execDate;
     }
 
     @Generated(hash = 1837957505)
@@ -126,6 +128,14 @@ public class Query {
             throw new DaoException("Entity is detached from DAO context");
         }
         myDao.update(this);
+    }
+
+    public Long getExecDate() {
+        return this.execDate;
+    }
+
+    public void setExecDate(Long execDate) {
+        this.execDate = execDate;
     }
 
     /** called by internal mechanisms, do not call yourself. */

@@ -2,15 +2,17 @@ package bb.testask.githubusersearch.ui.ext
 
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View
 import android.widget.ViewFlipper
 
 /**
  * Extensions for UI elements
  */
+fun View.hide() = let { visibility = View.INVISIBLE }
 
 fun ViewFlipper.progress() = let { displayedChild = 0 }
 
-fun ViewFlipper.noUsersFound() = let { displayedChild = 1 }
+fun ViewFlipper.message() = let { displayedChild = 1 }
 
 fun ViewFlipper.empty() = let { displayedChild = 2 }
 
