@@ -35,6 +35,7 @@ class UserLocalModel @Inject constructor(private val daoSession: DaoSession) {
      */
     fun getUsers(query: String): List<User> {
         val dbQuery = findQueryByPK(query) ?: return emptyList()
+        queryDao.updateInTx(dbQuery.apply { execDate = System.currentTimeMillis() })
         return dbQuery.users
     }
 

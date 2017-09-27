@@ -10,6 +10,10 @@ Project demonstrates how to use Kotlin, Android Architecture Components, Dagger 
 2. Search screen - performs user search via GitHub API, displays it in list and store result in local DB
 3. Details screen - shows user name, bio and repositories list
 
+#### How to install
+
+Please use [app/app-release.apk](./app/app-release.apk) file
+
 #### Used language and libraries
  * [Kotlin](https://kotlinlang.org/docs/tutorials/kotlin-android.html) - primary project language
  * [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/index.html) - the core of [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) pattern
