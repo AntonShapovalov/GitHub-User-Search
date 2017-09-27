@@ -15,6 +15,8 @@ public class Query2User {
 
     private Long queryId; // FK on Query
     private Long userId; // FK on User
+    //
+
     @Generated(hash = 1417671705)
     public Query2User(Long id, Long queryId, Long userId) {
         this.id = id;

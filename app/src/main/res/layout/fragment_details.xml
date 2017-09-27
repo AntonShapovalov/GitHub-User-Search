@@ -7,45 +7,29 @@
     android:layout_height="match_parent"
     tools:ignore="ContentDescription">
 
-    <ImageView
-        android:id="@+id/imageAvatar"
-        android:layout_width="160dp"
-        android:layout_height="160dp"
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_avatar_placeholder"
+        app:layout_constraintBottom_toTopOf="@+id/hGuideline30p"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/textName"
+        <include layout="@layout/layout_profile"/>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/hGuideline30p"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageAvatar"
-        tools:text="Full Name"/>
-
-    <TextView
-        android:id="@+id/textBio"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="0dp"
-        android:gravity="center"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textName"
-        tools:text="bio"/>
-
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.45"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/repoList"
@@ -58,7 +42,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textBio"/>
+        app:layout_constraintTop_toTopOf="@+id/hGuideline30p"/>
 
     <include
         layout="@layout/layout_flipper"
@@ -67,6 +51,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textBio"/>
+        app:layout_constraintTop_toBottomOf="@+id/hGuideline30p"/>
 
 </android.support.constraint.ConstraintLayout>

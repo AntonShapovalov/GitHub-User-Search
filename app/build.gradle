@@ -66,6 +66,8 @@ dependencies {
     // glide
     compile "com.github.bumptech.glide:glide:$glideVersion"
     compile "de.hdodenhof:circleimageview:$circleImageVersion"
+    // stetho
+    compile "com.facebook.stetho:stetho:$stethoVersion"
 }
 repositories {
     mavenCentral()

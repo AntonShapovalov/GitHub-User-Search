@@ -26,38 +26,71 @@ class DetailsViewModel @Inject constructor() : ViewModel() {
     /**
      * Load User profile info:
      * 1. load user from local ID to set avatar on UI
-     * 2. check if user name is empty - load profile from remote API
+     * 2. in parallel:
+     * 2.1 check if user name is empty - load profile from remote API
+     * 2.2 check if repositories is empty - load repositories
      */
-
     fun getUserDetails() {
-        if (state.value is ProfileLoaded) return@getUserDetails
-        val s = Observable.fromCallable { userLocalModel.getProfile(userId) }
+        val currentState = state.value
+        if (currentState is ProfileLoaded && currentState.isName && currentState.isRepos) return
+        val s = Observable.just(userId)
+                .filter { it > 0 }
+                .map { userLocalModel.getProfile(it) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { state.value = StateProgress }
-                .subscribe({ getProfileDetails(it) }, { state.value = StateError(it) })
+                .subscribe({
+                    state.value = UserLoaded(it)
+                    getProfileDetails(it)
+                    getRepos(it)
+                }, { state.value = StateError(it) })
         subscriptions.add(s)
     }
 
+    // get name and bio
     private fun getProfileDetails(user: User) {
-        state.value = UserLoaded(user)
-        val s = getLocalProfileData(user)
-                .concatWith(getRemoteProfileData(user))
+        val s = getLocalProfile(user)
+                .concatWith(getRemoteProfile(user))
                 .take(1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ state.value = ProfileLoaded(it) }, { state.value = StateError(it) })
+                .subscribe({ setProfileState(it, { it.isName = true }) }, { state.value = StateError(it) })
         subscriptions.add(s)
     }
 
-    private fun getLocalProfileData(user: User): Observable<User> = Observable.just(user)
+    private fun getLocalProfile(user: User): Observable<User> = Observable.just(user)
             .filter { !it.name.isNullOrEmpty() }
 
-    private fun getRemoteProfileData(user: User): Observable<User> = Observable.just(user)
+    private fun getRemoteProfile(user: User): Observable<User> = Observable.just(user)
             .filter { !it.login.isNullOrEmpty() }
             .flatMap { userRemoteModel.getProfile(it.login) }
             .doOnNext { userLocalModel.saveProfile(it) }
-            .map { userLocalModel.getProfile(userId) }
+            .map { user }
+
+    // get repositories
+    private fun getRepos(user: User) {
+        val s = getLocalRepos(user)
+                .concatWith(getRemoteRepos(user))
+                .take(1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ setProfileState(it, { it.isRepos = true }) }, { state.value = StateError(it) })
+        subscriptions.add(s)
+    }
+
+    private fun getLocalRepos(user: User): Observable<User> = Observable.just(user)
+            .filter { user.repos.isNotEmpty() }
+
+    private fun getRemoteRepos(user: User): Observable<User> = Observable.just(user)
+            .filter { !it.login.isNullOrEmpty() }
+            .flatMap { userRemoteModel.getRepos(it.login) }
+            .doOnNext { userLocalModel.saveRepos(user, it) }
+            .map { user }
+
+    private fun setProfileState(user: User, action: (profileState: ProfileLoaded) -> Unit) {
+        val currentState = state.value
+        state.value = (currentState as? ProfileLoaded)?.copy()?.also(action) ?: ProfileLoaded(user).also(action)
+    }
 
     override fun onCleared() {
         super.onCleared()

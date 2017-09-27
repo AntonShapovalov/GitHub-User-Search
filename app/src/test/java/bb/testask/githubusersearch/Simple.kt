@@ -37,8 +37,7 @@ class Simple {
         latch.await()
     }
 
-    private fun printlnTime(s: String) {
-        println("$s, ${dateFormat.format(System.currentTimeMillis())}")
-    }
+    private fun printlnTime(s: String) =
+            println("$s, ${dateFormat.format(System.currentTimeMillis())}")
 
 }

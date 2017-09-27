@@ -6,6 +6,7 @@ import bb.testask.githubusersearch.app.DaggerAppTestComponent
 import bb.testask.githubusersearch.app.SearchApplication
 import bb.testask.githubusersearch.dao.DaoSession
 import bb.testask.githubusersearch.model.ProfileResponse
+import bb.testask.githubusersearch.model.RepoEntry
 import bb.testask.githubusersearch.model.UserEntry
 import org.junit.After
 import org.junit.Assert
@@ -41,6 +42,7 @@ class UserLocalModelTest {
     fun saveRemoteData() {
         saveUsers()
         saveProfile()
+        saveRepos()
     }
 
     private fun saveUsers() {
@@ -68,9 +70,15 @@ class UserLocalModelTest {
         assertEquals(dummy, user.name)
     }
 
-    @After
-    fun tearDown() {
-        userLocalModel.clear()
+    private fun saveRepos() {
+        val response = listOf(RepoEntry(id = 27, name = dummy, language = dummy))
+        val user = userLocalModel.getProfile(id)
+        userLocalModel.saveRepos(user, response)
+        val repos = user.repos
+        Assert.assertEquals(1, repos.size)
     }
+
+    @After
+    fun tearDown() = userLocalModel.clear()
 
 }

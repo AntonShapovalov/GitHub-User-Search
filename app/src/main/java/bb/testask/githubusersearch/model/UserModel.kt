@@ -31,5 +31,15 @@ data class ProfileResponse(
         val login: String,
         val id: Int,
         val name: String,
-        val bio: String?
+        val bio: String? = null
+)
+
+/**
+ * Response model of [ApiService.getRepos]
+ */
+data class RepoEntry(
+        val id: Int,
+        val name: String,
+        val language: String,
+        val description: String? = null
 )

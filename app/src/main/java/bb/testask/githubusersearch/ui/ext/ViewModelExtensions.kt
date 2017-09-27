@@ -23,7 +23,7 @@ data class SearchRestored(val query: String) : ViewModelState()
 data class UsersLoaded(val query: String, val users: List<User>) : ViewModelState()
 
 data class UserLoaded(val user: User) : ViewModelState() // avatarUrl
-data class ProfileLoaded(val user: User) : ViewModelState() // name and bio
+data class ProfileLoaded(val user: User, var isName: Boolean = false, var isRepos: Boolean = false) : ViewModelState() // name, bio and repositories
 
 /**
  * ViewModelState LiveData - to init default state value

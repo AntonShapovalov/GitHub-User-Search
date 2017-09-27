@@ -8,7 +8,11 @@ import android.widget.ViewFlipper
 /**
  * Extensions for UI elements
  */
+fun View.show() = let { visibility = View.VISIBLE }
+
 fun View.hide() = let { visibility = View.INVISIBLE }
+
+fun View.gone() = let { visibility = View.GONE }
 
 fun ViewFlipper.progress() = let { displayedChild = 0 }
 

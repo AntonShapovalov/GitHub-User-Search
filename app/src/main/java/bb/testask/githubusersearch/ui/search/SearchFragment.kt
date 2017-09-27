@@ -27,7 +27,7 @@ class SearchFragment : Fragment() {
     @Inject lateinit var factory: ViewModelFactory
 
     private lateinit var viewModel: SearchViewModel
-    private val adapter: UserListAdapter = UserListAdapter { showUserDetails(it) }
+    private val adapter = UserListAdapter { showUserDetails(it) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_search, container, false)
@@ -63,29 +63,23 @@ class SearchFragment : Fragment() {
         super.onSaveInstanceState(outState)
     }
 
-    private fun onStateChanged(state: ViewModelState?) {
-        when (state) {
-            is StateProgress -> flipper.progress()
-            is SearchRestored -> searchView.setQuery(state.query, true)
-            is UsersLoaded -> setUsers(state.users)
-            is StateError -> showError(state.throwable, R.string.error_message_search, { flipper.empty() })
-            else -> flipper.empty()
-        }
+    private fun onStateChanged(state: ViewModelState?) = when (state) {
+        is StateProgress -> flipper.progress()
+        is SearchRestored -> searchView.setQuery(state.query, true)
+        is UsersLoaded -> setUsers(state.users)
+        is StateError -> showError(state.throwable, R.string.error_message_search, { flipper.empty() })
+        else -> flipper.empty()
     }
 
-    private fun setUsers(users: List<User>) {
-        if (users.isEmpty()) {
-            flipper.message()
-            adapter.clearItems()
-        } else {
-            flipper.empty()
-            adapter.setItems(users)
-        }
+    private fun setUsers(users: List<User>) = if (users.isEmpty()) {
+        flipper.message()
+        adapter.clearItems()
+    } else {
+        flipper.empty()
+        adapter.setItems(users)
     }
 
-    private fun showUserDetails(userId: Int) {
-        activity.showDetailsFragment(userId)
-    }
+    private fun showUserDetails(userId: Int) = activity.showDetailsFragment(userId)
 
 }
 

@@ -3,6 +3,7 @@ package bb.testask.githubusersearch.datamodel
 import bb.testask.githubusersearch.api.ApiModule
 import bb.testask.githubusersearch.api.DaggerApiTestComponent
 import bb.testask.githubusersearch.model.ProfileResponse
+import bb.testask.githubusersearch.model.RepoEntry
 import bb.testask.githubusersearch.model.UserEntry
 import org.junit.Assert
 import org.junit.Before
@@ -20,12 +21,10 @@ class UserRemoteModelTest {
     private val login = "antonshapovalov"
 
     @Before
-    fun setUp() {
-        DaggerApiTestComponent.builder()
-                .apiModule(ApiModule())
-                .build()
-                .inject(this)
-    }
+    fun setUp() = DaggerApiTestComponent.builder()
+            .apiModule(ApiModule())
+            .build()
+            .inject(this)
 
     @Test
     fun getUsers() {
@@ -48,6 +47,21 @@ class UserRemoteModelTest {
                 .doOnNext {
                     Assert.assertTrue(it.name.isNotEmpty())
                     System.out.println(it)
+                }
+                .subscribe(testSubscriber)
+        testSubscriber.assertNoErrors()
+        testSubscriber.assertCompleted()
+        testSubscriber.assertUnsubscribed()
+    }
+
+    @Test
+    fun getRepos() {
+        val testSubscriber = TestSubscriber<List<RepoEntry>>()
+        userRemoteModel.getRepos(login)
+                .doOnNext {
+                    Assert.assertTrue(it.isNotEmpty())
+                    Assert.assertTrue(it[0].name.isNotEmpty())
+                    it.forEach { System.out.println(it) }
                 }
                 .subscribe(testSubscriber)
         testSubscriber.assertNoErrors()

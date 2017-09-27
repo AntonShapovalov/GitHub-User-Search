@@ -26,7 +26,7 @@ class SearchViewModel @Inject constructor() : ViewModel() {
      * Try to restore last success query on app launch
      */
     fun restoreLastQuery() {
-        if (state.value is SearchRestored || state.value is UsersLoaded) return@restoreLastQuery
+        if (state.value is SearchRestored || state.value is UsersLoaded) return
         val s = Observable.fromCallable { userLocalModel.getLastQuery() }
                 .map { if (it.isNotEmpty()) SearchRestored(it) else StateIdle }
                 .subscribeOn(Schedulers.io())
@@ -41,7 +41,7 @@ class SearchViewModel @Inject constructor() : ViewModel() {
      */
     fun search(query: String) {
         val currentValue = state.value
-        if (currentValue is UsersLoaded && currentValue.query == query) return@search
+        if (currentValue is UsersLoaded && currentValue.query == query) return
         val s = getLocalData(query)
                 .concatWith(getRemoteData(query))
                 .take(1)

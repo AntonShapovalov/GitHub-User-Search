@@ -21,6 +21,7 @@ buildscript {
         greenDaoVersion = '3.2.0'
         glideVersion = '3.7.0'
         circleImageVersion = '2.1.0'
+        stethoVersion = '1.4.2'
     }
     repositories {
         jcenter()
