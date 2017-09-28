@@ -28,6 +28,7 @@ class RepoListAdapter : RecyclerView.Adapter<RepoListAdapter.ViewHolder>() {
         view.textName.text = repo.name
         view.textDesc.apply { if (repo.description.isNullOrEmpty()) gone() else show(); text = repo.description }
         view.textLanguage.apply { if (repo.language.isNullOrEmpty()) gone() else show(); text = repo.language }
+        view.listDivider.apply { if (position == items.size - 1) gone() else show() }
     }
 
     override fun getItemCount(): Int = items.size

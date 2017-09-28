@@ -14,6 +14,7 @@ import bb.testask.githubusersearch.ui.activity.MainActivity
 import bb.testask.githubusersearch.ui.ext.*
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_details.*
+import kotlinx.android.synthetic.main.layout_avatar.*
 import kotlinx.android.synthetic.main.layout_flipper.*
 import kotlinx.android.synthetic.main.layout_profile.*
 import javax.inject.Inject
@@ -72,6 +73,8 @@ class DetailsFragment : Fragment() {
         if (state.isRepos) adapter.setItems(user.repos)
     }
 
-    private fun setAvatar(user: User) = Glide.with(imageAvatar.context).load(user.avatarUrl).into(imageAvatar)
+    private fun setAvatar(user: User) = Glide.with(imageAvatar.context)
+            .load(user.avatarUrl)
+            .into(imageAvatar)
 
 }
