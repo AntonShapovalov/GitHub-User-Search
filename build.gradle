@@ -2,9 +2,8 @@
 
 buildscript {
     ext {
-        kotlinVersion = '1.1.50'
+        kotlinVersion = '1.1.51'
         compileSdkVersion = 26
-        buildToolsVersion = '26.0.1'
         minSdkVersion = 16
         targetSdkVersion = 26
         supportLibraryVersion = '26.1.0'
@@ -27,7 +26,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.0'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 

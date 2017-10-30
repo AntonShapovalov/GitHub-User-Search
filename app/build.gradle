@@ -8,9 +8,8 @@ def ext = rootProject.ext
 
 android {
     compileSdkVersion ext.compileSdkVersion
-    buildToolsVersion ext.buildToolsVersion
     defaultConfig {
-        applicationId "bb.testask.githubusersearch"
+        applicationId "concept.githubusersearch"
         minSdkVersion ext.minSdkVersion
         targetSdkVersion ext.targetSdkVersion
         versionCode 1
