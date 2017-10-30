@@ -12,7 +12,7 @@ Project demonstrates how to use Kotlin, Android Architecture Components, Dagger 
 
 #### How to install
 
-Please use [app/release/app-release.apk](./app/release/app-release.apk) file
+Please use [app-release.apk](./app/release/) file
 
 #### Used language and libraries
  * [Kotlin](https://kotlinlang.org/docs/tutorials/kotlin-android.html) - primary project language
