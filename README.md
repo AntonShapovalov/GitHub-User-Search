@@ -6,7 +6,7 @@ Project demonstrates how to use Kotlin, Android Architecture Components, Dagger 
 
 #### Structure:
 
-1. Launch screen - shows logo defined amount of time and do Dagger components initialization in parallel
+1. Launch screen - shows logo and does Dagger components initialization in parallel
 2. Search screen - performs user search via GitHub API, displays it in list and store result in local DB
 3. Details screen - shows user name, bio and repositories list
 
