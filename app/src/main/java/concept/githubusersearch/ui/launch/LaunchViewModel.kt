@@ -1,7 +1,7 @@
 package concept.githubusersearch.ui.launch
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
+import androidx.lifecycle.AndroidViewModel
 import concept.githubusersearch.app.SearchApplication
 import concept.githubusersearch.ui.ext.StateError
 import concept.githubusersearch.ui.ext.StateIdle

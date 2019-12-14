@@ -18,7 +18,7 @@ class UserRemoteModel @Inject constructor() {
 
     fun getUsers(query: String): Observable<List<UserEntry>> = apiService
             .getUsers(query)
-            .map { if (it.isSuccessful) it.body().items else emptyList() }
+            .map { if (it.isSuccessful) it.body()?.items else emptyList() }
 
     fun getProfile(login: String): Observable<ProfileResponse> = apiService
             .getProfile(login)

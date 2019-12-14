@@ -1,6 +1,6 @@
 package concept.githubusersearch.ui.search
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import concept.githubusersearch.dao.User
 import concept.githubusersearch.datamodel.UserLocalModel
 import concept.githubusersearch.datamodel.UserRemoteModel

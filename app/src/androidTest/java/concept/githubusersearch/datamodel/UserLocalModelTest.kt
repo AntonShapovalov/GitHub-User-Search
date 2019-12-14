@@ -1,7 +1,7 @@
 package concept.githubusersearch.datamodel
 
-import android.support.test.InstrumentationRegistry
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import concept.githubusersearch.app.DaggerAppTestComponent
 import concept.githubusersearch.app.SearchApplication
 import concept.githubusersearch.dao.DaoSession
@@ -30,7 +30,7 @@ class UserLocalModelTest {
 
     @Before
     fun setUp() {
-        val app = InstrumentationRegistry.getTargetContext().applicationContext as SearchApplication
+        val app = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as SearchApplication
         DaggerAppTestComponent.builder()
                 .appComponent(app.appComponent)
                 .build()
@@ -75,7 +75,7 @@ class UserLocalModelTest {
         val user = userLocalModel.getProfile(id)
         userLocalModel.saveRepos(user, response)
         val repos = user.repos
-        Assert.assertEquals(1, repos.size)
+        assertEquals(1, repos.size)
     }
 
     @After

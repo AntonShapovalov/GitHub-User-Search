@@ -1,7 +1,7 @@
 package concept.githubusersearch
 
-import android.support.test.InstrumentationRegistry
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,8 +15,8 @@ class SimpleAndroid {
     @Test
     @Throws(Exception::class)
     fun test() {
-        val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("bb.testask.githubusersearch", appContext.packageName)
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        assertEquals("concept.githubusersearch", appContext.packageName)
     }
 
 }

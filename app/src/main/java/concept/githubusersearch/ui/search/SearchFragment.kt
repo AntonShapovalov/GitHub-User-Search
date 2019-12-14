@@ -1,10 +1,10 @@
 package concept.githubusersearch.ui.search
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,15 +32,15 @@ class SearchFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_search, container, false)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         userList.initList(adapter, LinearLayoutManager.VERTICAL)
         //
         searchView.queryHint = getString(R.string.search_hint)
-        searchView.setIconifiedByDefault(false)
+        searchView.isIconifiedByDefault = false
         searchView.setOnQueryTextListener(QueryTextListener {
             viewModel.search(it)
-            activity.hideKeyboard()
+            activity?.hideKeyboard()
         })
     }
 
@@ -56,9 +56,9 @@ class SearchFragment : Fragment() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         with(viewModel.state.value) {
-            if (this is UsersLoaded) outState?.putString(QUERY_KEY, this.query)
+            if (this is UsersLoaded) outState.putString(QUERY_KEY, this.query)
         }
         super.onSaveInstanceState(outState)
     }
@@ -67,7 +67,7 @@ class SearchFragment : Fragment() {
         is StateProgress -> flipper.progress()
         is SearchRestored -> searchView.setQuery(state.query, true)
         is UsersLoaded -> setUsers(state.users)
-        is StateError -> showError(state.throwable, R.string.error_message_search, { flipper.empty() })
+        is StateError -> showError(state.throwable, R.string.error_message_search) { flipper.empty() }
         else -> flipper.empty()
     }
 
@@ -79,7 +79,7 @@ class SearchFragment : Fragment() {
         adapter.setItems(users)
     }
 
-    private fun showUserDetails(userId: Int) = activity.showDetailsFragment(userId)
+    private fun showUserDetails(userId: Int) = activity?.showDetailsFragment(userId)
 
 }
 

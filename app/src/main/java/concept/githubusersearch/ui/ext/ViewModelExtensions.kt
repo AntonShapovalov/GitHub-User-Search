@@ -1,8 +1,8 @@
 package concept.githubusersearch.ui.ext
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import concept.githubusersearch.dao.User
 import concept.githubusersearch.ui.details.DetailsViewModel
 import concept.githubusersearch.ui.search.SearchViewModel
@@ -42,8 +42,7 @@ class ViewModelFactory @Inject constructor(
         private val detailsViewModel: DetailsViewModel
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>?): T = when {
-        modelClass == null -> throw RuntimeException("Provide Class<T> for Factory")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T = when {
         modelClass.isInstance(searchViewModel) -> searchViewModel as T
         modelClass.isInstance(detailsViewModel) -> detailsViewModel as T
         else -> throw RuntimeException("Unknown ViewModel, inject it in constructor")

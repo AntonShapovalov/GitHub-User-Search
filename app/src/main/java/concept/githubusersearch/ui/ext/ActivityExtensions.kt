@@ -1,12 +1,12 @@
 package concept.githubusersearch.ui.ext
 
 import android.app.Activity
-import android.app.FragmentTransaction
 import android.content.Context
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.fragment.app.FragmentTransaction
 import concept.githubusersearch.R
 import concept.githubusersearch.ui.details.DetailsFragment
 import concept.githubusersearch.ui.details.setParams
@@ -74,5 +74,5 @@ fun Activity.hideKeyboard() = currentFocus?.let {
 fun Fragment.showError(throwable: Throwable, messageId: Int, action: () -> Unit) {
     action()
     throwable.printStackTrace()
-    activity.showToast(throwable.message ?: getString(messageId))
+    activity?.showToast(throwable.message ?: getString(messageId))
 }

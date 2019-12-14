@@ -1,7 +1,7 @@
 package concept.githubusersearch.ui.activity
 
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import concept.githubusersearch.R
 import concept.githubusersearch.app.SearchApplication
 import concept.githubusersearch.ui.ext.showLaunchFragment

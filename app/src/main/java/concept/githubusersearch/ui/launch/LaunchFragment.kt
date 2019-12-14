@@ -1,9 +1,9 @@
 package concept.githubusersearch.ui.launch
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,8 +30,8 @@ class LaunchFragment : Fragment() {
     }
 
     private fun onStateChanged(state: ViewModelState?) = when (state) {
-        is StateIdle -> activity.showSearchFragment()
-        is StateError -> showError(state.throwable, R.string.error_message_launch, { progress.hide() })
+        is StateIdle -> activity?.showSearchFragment()
+        is StateError -> showError(state.throwable, R.string.error_message_launch) { progress.hide() }
         else -> {
         }
     }

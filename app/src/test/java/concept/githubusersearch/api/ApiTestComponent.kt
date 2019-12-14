@@ -8,7 +8,7 @@ import javax.inject.Singleton
  * Provide dependencies for [UserRemoteModelTest]
  */
 @Singleton
-@Component(modules = arrayOf(ApiModule::class))
+@Component(modules = [ApiModule::class])
 interface ApiTestComponent {
 
     fun inject(test: UserRemoteModelTest)
