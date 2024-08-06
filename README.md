@@ -2,7 +2,7 @@
 
 #### Android application to search users via GitHub API
 
-Project demonstrates how to use Kotlin, Android Architecture Components, Dagger and RxJava to perform remote API calls and cache data in local DB
+Project demonstrates how to use Kotlin, Android Architecture Components, Dagger and RxJava to perform remote API calls and cache data in local DB.
 
 #### Structure:
 
@@ -12,7 +12,7 @@ Project demonstrates how to use Kotlin, Android Architecture Components, Dagger 
 
 #### How to install
 
-Please use [app-release.apk](./app/release/) file
+Please use [app-release.apk](./app/release/) file.
 
 #### Used language and libraries
  * [Kotlin](https://kotlinlang.org/docs/tutorials/kotlin-android.html) - primary project language
